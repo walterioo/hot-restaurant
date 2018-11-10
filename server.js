@@ -33,27 +33,24 @@ app.get("/api/waitlist", function (req,res) {
 app.post("/api/reservation", function(req,res) {
     var newReserv = req.body;
     newReserv.routeName = newReserv.name.replace(/ /g, "").toLowerCase();
-    console.log(newReserv);
-
+    //console.log(newReserv);
+    var isItFull = false;
     if(reservation.length <= 4) {
         reservation.push(newReserv);
     } else {
         waitingList.push(newReserv);
+        isItFull = true;
     }
 
-    res.json(newReserv);  
+    res.json(newReserv);
+    return isItFull;  
 })
 
 app.delete("/api/clear", function(req,res) {
+        
         reservation = [];
         waitingList = [];
 })
-
-
-
-
-
-
 
 app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT); 
