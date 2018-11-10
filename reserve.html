@@ -17,8 +17,8 @@
         <h1>Hot Restaurant</h1>
         <h3>We only have 5 tables! Book your seat before thay all are gone!</h3>
         <hr>
-        <a href="/add"><button class="btn btn-primary btn-lg"><span class="fa fa-plus"></span> View Tables</button></a>
-        <a href="/add"><button class="btn btn-danger btn-lg"><span class="fa fa-plus"></span> Make Revervation</button></a>
+        <a href="/tables"><button class="btn btn-primary btn-lg"><span class="fa fa-plus"></span> View Tables</button></a>
+        <a href="/"><button class="btn btn-danger btn-lg"><span class="fa fa-home"></span>Home</button></a>
     </div>
               
     <div class="row">
@@ -64,23 +64,29 @@
     </div>
   </div>
 
+  <footer class="container mt-2">
+      <a href="/api/tables/">API Table Link</a> | 
+      <a href="/api/waitlist">API Wait List</a>
+  </footer>
+
   <script type="text/javascript">
 
     $("#add-btn").on("click", function(event) {
       event.preventDefault();
       var newReservation = {
         name: $("#name").val().trim(),
-        role: $("#phone").val().trim(),
-        age: $("#email").val().trim(),
-        forcePoints: $("#id").val().trim()
+        phone: $("#phone").val().trim(),
+        email: $("#email").val().trim(),
+        id: $("#id").val().trim()
       };
 
-      
-      $.post("/api/characters", newReservation)
+      $.post("/api/reservation", newReservation)
         .then(function(data) {
           console.log("reserve.html", data);
           alert("Adding reservation...");
         });
+
+        $(".form-control").val(" ");
     });
   </script>
 

@@ -19,60 +19,87 @@
       <h1>Hot Restaurant</h1>
       <h3>We only have 5 tables! Book your seat before thay all are gone!</h3>
       <hr>
-      <a href="/add"><button class="btn btn-primary btn-lg"><span class="fa fa-plus"></span> View Tables</button></a>
+      <a href="/"><button class="btn btn-primary btn-lg"><span class="fa fa-home"></span> Home</button></a>
       <a href="/add"><button class="btn btn-danger btn-lg"><span class="fa fa-plus"></span> Make Revervation</button></a>
 
     </div>
-    
+
     <div class="row">
 
       <div class="col-12">
 
-    
+
 
         <div class="card">
           <div class="card-header">
             <h5><strong>Current Reservations</strong></h5>
           </div>
-          <div class="card-body">
-           
+          <div class="card-body reserved-tables">
+
           </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-              <h5><strong>Waiting List</strong></h5>
+        <div class="card mt-2">
+          <div class="card-header">
+            <h5><strong>Waiting List</strong></h5>
+          </div>
+          <div class="card-body waitlist">
+
             </div>
-                
         </div>
-   
+
       </div>
-    </div> 
+    </div>
 
-  <script type="text/javascript">
-    $("#search-btn").on("click", function() {
-      var searchedCharacter = $("#character-search").val().trim();
+    <footer class="container mt-2">
+      <a href="#" id="clear">Clear Table</a> | 
+      <a href="/api/tables/">API Table Link</a> | 
+      <a href="/api/waitlist">API Wait List</a>
+    </footer>
 
-      // Using a RegEx Pattern to remove spaces from searchedCharacter
-      // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-      searchedCharacter = searchedCharacter.replace(/\s+/g, "").toLowerCase();
+    <script type="text/javascript">
+      $(document).ready(() => {
+        var queryTable = "/api/tables/"
+        var queryWaitlist = "/api/waitlist/"
 
-      $.get("/api/characters/" + searchedCharacter, function(data) {
-        console.log(data);
-        if (data) {
-          $("#stats").show();
-          $("#name").text(data.name);
-          $("#role").text(data.role);
-          $("#age").text(data.age);
-          $("#force-points").text(data.forcePoints);
-        }
-        else {
-          $("#name").text("The force is not strong with this one. Your character was not found.");
-          $("#stats").hide();
-        }
-      });
-    });
-  </script>
+        $.ajax({
+          url: queryTable,
+          method: "GET"
+        }).then((response) => {
+          console.log(response);
+          for (let i = 0; i < response.length; i++) {
+            let x = i + 1;
+            let $newDiv = $("<div class='card-header'>");
+            $newDiv.html(x + ' | ' + response[i].name);
+            $(".reserved-tables").append($newDiv);
+          }
+        })
+
+        $.ajax({
+          url: queryWaitlist,
+          method: "GET"
+        }).then((response) => {
+          console.log(response);
+          for (let i = 0; i < response.length; i++) {
+            let x = i + 1;
+            let $newDiv = $("<div class='card-header'>");
+            $newDiv.html(x + ' | ' + response[i].name);
+            $(".waitlist").append($newDiv);
+          }
+        })
+
+        $("#clear").on("click", function (event) {
+          alert("Clearing info...");
+          $.ajax({
+            url: ("/api/clear"),
+            method: "DELETE"
+          })
+          $(".card-body").html(" ");
+        });
+
+
+      })
+    </script>
 </body>
 
 </html>

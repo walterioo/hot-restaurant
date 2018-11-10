@@ -7,18 +7,8 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
-var reservation = [{
-    routeName: "firtRes",
-    name: "firt reserv",
-    email: "mail.com",
-    id: 1
-}];
-var waitingList = [{
-    routeName: "firtRes",
-    name: "firt reserv",
-    email: "mail.com",
-    id: 2
-}];
+var reservation = [];
+var waitingList = [];
 
 app.get("/", function(req,res) {
     res.sendFile(path.join(__dirname, "home.html"));
@@ -54,6 +44,10 @@ app.post("/api/reservation", function(req,res) {
     res.json(newReserv);  
 })
 
+app.delete("/api/clear", function(req,res) {
+        reservation = [];
+        waitingList = [];
+})
 
 
 
